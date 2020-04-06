@@ -1,0 +1,12 @@
+.App {
+    text-align: center;
+}
+
+.buttonColor {
+    background-color: blue;
+    color: white;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: bold;
+  font-family: "Times New Roman";
+}
