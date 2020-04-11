@@ -12,6 +12,14 @@ class Util {
     sliceArray = (sliceObject) => {
         return sliceObject.slice();
     };
+
+    classNamesArray = (red, bold) => {
+        let classNamesArray = [];
+        classNamesArray.push(red);
+        classNamesArray.push(bold);
+        return classNamesArray;
+    }
+
 }
 
 
