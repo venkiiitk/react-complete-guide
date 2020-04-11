@@ -1,54 +1,79 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import './App.css';
-import Validation from './Validation/Validation';
-import Char from './Char/Char';
+import Person from "./Person/Person";
+import Util from "./util/Util";
+import Radium from 'radium';
 
 class App extends Component {
     state = {
-        userInput: ''
-    }
+        showPersons: true,
+        persons: [
+            {name: "venkat", age: "25", id: "1"},
+            {name: "mahi", age: "25", id: "2"},
+            {name: "reddy", age: "25", id: "3"},
+        ]
 
-    inputChangedHandler = ( event ) => {
-        this.setState( { userInput: event.target.value } );
-    }
+    };
 
-    deleteCharHandler = ( index ) => {
-        const text = this.state.userInput.split('');
-        text.splice(index, 1);
-        const updatedText = text.join('');
-        this.setState({userInput: updatedText});
-    }
-
-    render () {
-        const charList = this.state.userInput.split('').map((ch, index) => {
-            return <Char
-                character={ch}
-                key={index}
-                clicked={() => this.deleteCharHandler(index)} />;
+    changeNameEvent = () => {
+        this.setState({
+            persons: [
+                {name: "venkat", age: "25", id: "1"},
+                {name: "mahi", age: "25", id: "2"},
+                {name: "reddy", age: "25", id: "3"},
+            ]
         });
+    };
+
+    hidePersons = () => {
+        this.setState(
+            {
+                showPersons: !this.state.showPersons
+            }
+        )
+    };
+
+    removeElement = (personIndex) => {
+        // const personsList = this.state.persons;
+        const util = new Util();
+        // const personsList = util.sliceArray(this.state.persons);
+        const personsList = util.spreadArray(this.state.persons);
+        util.removeElement(personsList, personIndex);
+        this.setState({persons: personsList});
+
+    };
+
+
+    render() {
+
+        const styleClass = {
+            backgroundColor: 'green',
+            color: 'white',
+            border: '2px solid black',
+            cursor: 'pointer',
+            padding: '10px',
+            width: '100px',
+            'font-weight': 'bold',
+            ':hover': {
+                backgroundColor: 'red',
+                color: 'black'
+            }
+        };
+        const classes = new Util().classNamesArray("red", "bold");
+        const persons = this.state.showPersons ? (this.state.persons.map((person, index) => {
+            return (<Person click={() => this.removeElement(index)} key={person.id} name={person.name}
+                            age={person.age}/>);
+        })) : null;
 
         return (
-            <div className="App">
-                <ol>
-                    <li>Create an input field (in App component) with a change listener which outputs the length of the entered text below it (e.g. in a paragraph).</li>
-                    <li>Create a new component (=> ValidationComponent) which receives the text length as a prop</li>
-                    <li>Inside the ValidationComponent, either output "Text too short" or "Text long enough" depending on the text length (e.g. take 5 as a minimum length)</li>
-                    <li>Create another component (=> CharComponent) and style it as an inline box (=> display: inline-block, padding: 16px, text-align: center, margin: 16px, border: 1px solid black).</li>
-                    <li>Render a list of CharComponents where each CharComponent receives a different letter of the entered text (in the initial input field) as a prop.</li>
-                    <li>When you click a CharComponent, it should be removed from the entered text.</li>
-                </ol>
-                <p>Hint: Keep in mind that JavaScript strings are basically arrays!</p>
-                <hr />
-                <input
-                    type="text"
-                    onChange={this.inputChangedHandler}
-                    value={this.state.userInput} />
-                <p>{this.state.userInput}</p>
-                <Validation inputLength={this.state.userInput.length} />
-                {charList}
+            <div className='App'>
+                <h1>Hi, this is my first react component.</h1>
+                <p className={classes.join(' ')}>Hi, this is my first react component.</p>
+                <button style={styleClass} onClick={this.hidePersons}>Toggle</button>
+                {persons}
             </div>
         );
-    }
+    };
 }
 
-export default App;
+export default Radium(App);
